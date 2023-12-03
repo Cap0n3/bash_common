@@ -1,4 +1,4 @@
-DEBUG=false
+DEBUG=true
 
 # ================================= #
 # Fonctions d'affichage de messages
@@ -19,51 +19,53 @@ print_additional_info() {
     echo -e "\033[0;33m[***] $1\033[0m"
 }
 
-# Fonction run_command
+# Function: run_silent
 #
-# Description :
-#   Exécute une commande Bash spécifiée en tant qu'argument de la fonction.
-#   Capture la sortie standard (stdout) et la sortie d'erreur (stderr) de la commande.
-#   Affiche des informations de débogage si la variable DEBUG est définie à true.
+# Description:
+#   Executes a specified Bash command as an argument to the function.
+#   Captures the standard output (stdout) and standard error (stderr) of the command.
+#   Displays debugging information if the DEBUG variable is set to true but runs silently otherwise.
 #
-# Utilisation :
-#   run_command [commande]
+# Usage:
+#   run_silent [command]
 #
-# Paramètres :
-#   - commande : La commande Bash à exécuter.
+# Parameters:
+#   - command: The Bash command to be executed.
 #
-# Variables d'environnement :
-#   - DEBUG : Si défini à true, affiche des informations de débogage.
+# Environment Variables:
+#   - DEBUG: If set to true, displays debugging information.
 #
-# Retour :
-#   - Succès (0) : Si la commande s'est exécutée avec succès.
-#   - Échec (1) : Si la commande a échoué. Affiche la sortie d'erreur de la commande.
+# Returns:
+#   - Success (0): If the command executed successfully.
+#   - Failure (1): If the command failed. Displays the error output of the command.
 #
-# Exemples d'utilisation :
-#   run_command "ls -l"
-#   run_command "echo 'Hello, World!'"
+# Examples:
+#   run_silent "ls -l"
+#   run_silent "echo 'Hello, World!'"
 #
-# Remarques :
-#   - Utilise eval pour exécuter la commande passée en argument.
-#   - Capture la sortie (stdout et stderr) de la commande pour l'affichage en cas d'échec.
+# Notes:
+#   - Uses eval to execute the provided command as an argument.
+#   - Captures the output (stdout and stderr) of the command for display in case of failure.
+#   - When DEBUG is set to true, displays debugging messages.
+#   - Operates silently (without display) when used without DEBUG, showing error output only on failure.
 #
-run_command() {
+run_silent() {
+    local output
+
     if [ "$DEBUG" = true ]; then
-        echo "[*] Exécution de la commande: $@"
+        echo "[*] Executing command : $@"
     fi
-    # Exécute la commande et capture la sortie standard (stdout) et la sortie d'erreur (stderr)
-    local output=$(eval "$@" 2>&1)
+    # Execute the command, capture the output and return the exit code
+    output=$(eval "$@" 2>&1)
 
     if [ $? -eq 0 ]; then
-        # La commande a réussi, affiche la commande exécutée
         if [ "$DEBUG" = true ]; then
-            echo "[*] Commande exécutée avec succès: $@"
+            echo "[*] Command successfully executed : $@"
         fi
         return 0
     else
-        # La commande a échoué, affiche la commande exécutée
-        echo "[!!!] La commande '$@' a échoué avec la sortie suivante:"
-        # Affiche la sortie d'erreur de la commande
+        echo "[!!!] Command '$@' failed with following output :"
+        # Display the output of the command
         print_error "$output"
         return 1
     fi
