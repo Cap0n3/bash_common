@@ -52,7 +52,7 @@ run_command() {
         echo "[*] Exécution de la commande: $@"
     fi
     # Exécute la commande et capture la sortie standard (stdout) et la sortie d'erreur (stderr)
-    output=$(eval "$@" 2>&1)
+    local output=$(eval "$@" 2>&1)
 
     if [ $? -eq 0 ]; then
         # La commande a réussi, affiche la commande exécutée
