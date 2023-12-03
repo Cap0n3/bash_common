@@ -25,6 +25,7 @@ print_additional_info() {
 #   Executes a specified Bash command as an argument to the function.
 #   Captures the standard output (stdout) and standard error (stderr) of the command.
 #   Displays debugging information if the DEBUG variable is set to true but runs silently otherwise.
+#   This function is useful for running commands that do not produce output but may fail.
 #
 # Usage:
 #   run_silent [command]
@@ -40,8 +41,9 @@ print_additional_info() {
 #   - Failure (1): If the command failed. Displays the error output of the command.
 #
 # Examples:
-#   run_silent "ls -l"
-#   run_silent "echo 'Hello, World!'"
+#   Example 1: 
+#       Run a command that may produce an error
+#       run_silent "ls -l /nonexistent"
 #
 # Notes:
 #   - Uses eval to execute the provided command as an argument.
